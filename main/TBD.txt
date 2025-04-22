@@ -1,0 +1,3 @@
+TO DO
+
+Rust CLI version and KiCad integration will be here, add nothing beforehand!
