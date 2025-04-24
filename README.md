@@ -2,8 +2,9 @@
 This project aims to provide a tool that can calculate propagation delay easily in KiCad for high speed digital designs.
 
 The current scope of the project is:
-  1. Create a Rust CLI that can easily be integrated into other projects
+  1. Create a Python CLI that can easily be integrated into other projects
   2. Accurate approximation of propagation delay
+  3. KiCad IPC
 
 The scope of the project will gradually increase, end goal being a easy to integrate CLI tool and KiCad integration.
 
