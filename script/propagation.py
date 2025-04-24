@@ -1,75 +1,154 @@
 #! /bin/python
 
-import math
+import numpy as np
 
 ### Vars
 
-    # Er (dielectric constant) for FR4
-fr_er = 4.5
+    # Dk (dielectric constant), initialize variable
 
-    # Approximate Ereff for FR4
-fr_ereff = 3.24
+dk = float(0.0)
 
-    # Vc? important for calculation, mm/ns, see:
-    # https://www.protoexpress.com/blog/signal-propagation-delay-pcb/
-    # 33,464566
+cvac = float(299792458.0000)
+
+# Other vars:
+#   mat = material
+#   opt = option
 
 ### Body of the code
 
-print("Input length of trace (mm):")
+### --> Instructions <--
+
+print(" ")
+print("All measurements are in mm (millimiters) and ps (picoseconds)")
+print("Decimal place must be separated by dot ( . ) and not comma")
+print(" ")
+
+### --> Inputs <---
+
+# Input material
+
+print(" Inputs:")
+print(" ")
+print("Material:")
+print("Obs: currently only FR4 is supported, format it all lowercase (ex: fr4)")
+
+# --> Input material <--
+mat = input()
+
+print(" ")
+
+# --> Input trace length <--
+
+print("Trace length (mm):")
+
 length = float(input())
-float(length)
 
 print("")
+
+# --> Input option (stripline or microstrip) <--
 
 print("Stripline or microstrip? (s/m)")
+
 opt = input()
+
 print("")
 
-# Currently only FR4 supported, ignore
-#material = input()
+match opt:
+    case "m":
+        print("Microstrip chosen.")
+        print(" ")
 
-def propagation_delay_calc_stripline(length, fr_er):
-    # Tpd calculation
-    i = 33.464566 * math.sqrt(fr_er)
-    print("The propagation delay in a stripline in FR4 is ", i, " mm/ps")
+        # --> Input trace width <--
 
-    float(i)
-    float(length)
-    # Rough approximation of total Tpd by Tpd*length
-    tpd = length / i
-    float(tpd)
+        print("Width of the trace (mm): ")
 
-    print("")
-    print("The propagation delay total is roughly ", tpd, " ps")
-    print("Roughly calculated by propagation delay / length")
+        width = float(input())
+
+        print(" ")
+
+        # --> Input distance to ground plane <--
+
+        print("Distance to ground plane (mm): ")
+
+        dgnd = float(input())
+    case "s":
+        pass
+    case _:
+        print("Error: invalid inputs")
+
+
+
+
+
+
+# Print newline
+
+print("")
+
+### --> End of inputs <--
+
+def propagation_delay_calc_stripline(cvac, dk, length):
+    x = np.pow(10, float(9)) / float(299792458.0000) * np.sqrt(dk)
+    
+    tpd = x * length
+
+    print(" ---> STRIPLINE <--- ")
     print(" ")
-    print("Remember to do it multiple times per interconnect")
-    print("These calculations do not include impedance and are for reference or feeding into other calculations in different scripts.")
-
-def propagation_delay_calc_microstrip(length, fr_ereff):
-    i = 33.464566 * math.sqrt(fr_ereff)
-    print("The propagation delay in a microstrip in FR4 is ", i, " mm/ps")
-
-    float(i)
-    float(length)
-    tpd = length / i
-    float(tpd)
-
-    print("")
-    print("The propagation delay total is roughly ", tpd, " ps")
-    print("Roughly calculated by propagation delay / length")
+    print("The propagation delay in ps/mm not accounting for legnth is approx: ", x, " ps/mm in the stripline")
+    print("Accounting for length is: ", tpd, " ps based on the length: ", length, " mm")
     print(" ")
-    print("Remember to do it multiple times per interconnect")
-    print("These calculations do not include impedance and are for reference or feeding into other calculations in different scripts.")
+    print("Chosen material's dielectric constant:    ", dk)
 
+
+def propagation_delay_calc_microstrip(cvac, dk , width, dgnd, length):
+
+    term_1 = (dk + 1) / 2
+    term_2 = (dk - 1) / 2
+    term_3 = np.pow((1 + ((12*dgnd) / width)), float(-0.5))
+    term_4 = np.pow(float( 1 - (width / dgnd ) ), 2)
+
+    ### --> Effective dielectric constant for microstrip <---
+
+    dk_eff = float(0.0)
+
+    if width < dgnd:
+        dk_eff = (term_1 + term_2 * (term_3 + 0.04 * (term_4)))
+
+    if width > dgnd:
+        dk_eff = (term_1 + term_2 * term_3)
+
+    ### --> Propagation delay microstrip calculation <---
+    
+    x = np.pow(10, float(9)) / float(299792458.0000) * np.sqrt(dk_eff)
+
+    tpd = x * length
+
+    print(" ---> MICROSTRIP <--- ")
+    print("The propagation delay in ps/mm not accounting for legnth is approx: ", x, " ps/mm in the microstrip")
+    print("Accounting for length is: ", tpd, " ps based on the length: ", length, " mm")
+    print(" ")
+    print("Chosen material's dielectric constant:    ", dk)
+    print("Microstrip effective dielectric constant: ", dk_eff)
+
+
+match mat:
+    case "fr4":
+        dk = float(4.5)
+    case _:
+        print("Error: material not implemented or wrong input")
+        print("Possible inputs:")
+        print(" input: fr4: PCB FR4, Dielectric constant = 4.5")
 
 match opt:
     case "s":
-        propagation_delay_calc_stripline(length, fr_er)
+        propagation_delay_calc_stripline(cvac, dk, length)
     case "m":
-        propagation_delay_calc_microstrip(length, fr_ereff)
+        propagation_delay_calc_microstrip(cvac, dk, width, dgnd, length)
+    case _:
+        print("Error: invalid inputs")
 
 print(" ")
-print("Not production tested, script by VerbenaIDK")
+print("NOT PRODUCTION TESTED.")
+print("Does not account for impedance.")
+print("Script by VerbenaIDK")
 
