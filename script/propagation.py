@@ -150,5 +150,6 @@ match opt:
 print(" ")
 print("NOT PRODUCTION TESTED.")
 print("Does not account for impedance.")
+print("Version: pre_release 1.0")
 print("Script by VerbenaIDK")
 
