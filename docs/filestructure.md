@@ -3,10 +3,10 @@
 The file structure of the project is as follows:
 
 ## Root
-  | docs/
+  | docs/       (documentation source code, will be hosted on a website, HTML)
   | hardware/
-  | script/
-  | main/      (software development)
+  | script/     (scripts, testing, proof of concept, etc)
+  | main/       (software development)
   | LICENSE
   | README.md
 

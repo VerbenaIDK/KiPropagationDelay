@@ -8,6 +8,11 @@ The current scope of the project is:
 
 The scope of the project will gradually increase, end goal being a easy to integrate CLI tool and KiCad integration.
 
+Thank you to:
+> Athenaya, for helping me with mathematics and code
+> Dangrain for some mathematics help 
+> Mnem which helped me dig up some info on the matter
+
 ## PRODUCTION UNTESTED, USE AT YOUR OWN RISK
 ## If you use a git version, you are on an unreleased, development version, report any bugs on the issues page and remember bugs and errors are very much possible with a git version.
 

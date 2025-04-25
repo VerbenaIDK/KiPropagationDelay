@@ -88,7 +88,7 @@ print("")
 ### --> End of inputs <--
 
 def propagation_delay_calc_stripline(cvac, dk, length):
-    x = np.pow(10, float(9)) / float(299792458.0000) * np.sqrt(dk)
+    x = np.pow(10, float(9)) / 299792458 * np.sqrt(dk)
     
     tpd = x * length
 
@@ -119,7 +119,7 @@ def propagation_delay_calc_microstrip(cvac, dk , width, dgnd, length):
 
     ### --> Propagation delay microstrip calculation <---
     
-    x = np.pow(10, float(9)) / float(299792458.0000) * np.sqrt(dk_eff)
+    x = np.pow(10, float(9)) / 299792458.0000 * np.sqrt(dk_eff)
 
     tpd = x * length
 
@@ -150,6 +150,6 @@ match opt:
 print(" ")
 print("NOT PRODUCTION TESTED.")
 print("Does not account for impedance.")
-print("Version: pre_release_1.0")
+print("Version: pre_release_v0.1")
 print("Script by VerbenaIDK")
 
