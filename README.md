@@ -1,4 +1,4 @@
-# KiCad Propgataion Delay Tool
+# KiCad Propagation Delay Tool
 "KiProp" for short maybe?
 
 This project aims to provide a tool that can calculate propagation delay easily in KiCad for high speed digital designs.
